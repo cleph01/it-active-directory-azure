@@ -35,11 +35,13 @@ This project demonstrates the implementation of on-premises Active Directory wit
     - Deploy two Azure Virtual Machines: Windows Server 2019 (Domain Controller) and Windows 10 (Client)
 
 2. Configure Active Directory:
-    - Install and configure Active Directory Domain Services (AD DS) and DNS on the Windows Server 2019 VM
+    - Install and configure Active Directory Domain Services (AD DS) on the Windows Server 2019 VM
     - Create and promote the server to a domain controller
+    - Modify DNS settings to static instead of dynamic
 
 3. Integrate Client Machine and User Management:
     - Join Windows 10 client VM to Domain
+    - Configure IPV4 settings to point to Domain Controller for DNS instead of Azure's DNS
     - Create users, groups, and organizational units (OUs) within Active Directory
     - Verify user authentication and group policy.
 
