@@ -235,7 +235,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 - Create a new forest and domain
 - Configure DNS to point to the server's private IP
 
-##### Installing AD DS
+#### Installing AD DS
 <p>
     <img width="1109" alt="image" src="https://github.com/user-attachments/assets/d57e2876-56e9-4518-9813-49a02ddfa2aa" />
 </p>
@@ -243,22 +243,31 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
     <img width="919" alt="image" src="https://github.com/user-attachments/assets/67d6660c-62f9-4139-8c5f-5c517d20823d" />
 </p>
 
-##### Promote Server to Domain Controller
+#### Promote Server to Domain Controller
 <p>
     <img width="1420" alt="image" src="https://github.com/user-attachments/assets/5a49aad3-e7dc-48f3-b790-efbaece12c62" />
 </p>
 
-##### Adding/Creating a New Forrest/Domain
+#### Adding/Creating a New Forrest/Domain
 <p>
     <img width="1271" alt="image" src="https://github.com/user-attachments/assets/4f5c808b-89b8-4131-9a66-b2a1e20ab852" />
 </p>
 
-##### Decide on NetBIOS Domain Name
+#### Decide on NetBIOS Domain Name
 - NetBIOS Domain Name is what shows up on login screen, so we have the option of "shrinking" the domain name so it doesn't take up too much real estate on the login screen.
 <p>
     <img width="944" alt="image" src="https://github.com/user-attachments/assets/2c2a33cc-5ddd-49d2-b0df-b9ae9353a5df" />
 </p>
 
+#### Finale of Install
+<p>
+    <img width="1382" alt="image" src="https://github.com/user-attachments/assets/ebdc7fae-e396-4d36-8bdf-2e165ca37efb" />
+</p>
+
+#### Login Within Domain Context
+<p>
+    <img width="560" alt="image" src="https://github.com/user-attachments/assets/3e176ee6-7cab-407d-91d5-8decbebbb362" />
+</p>
 <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 </p>
