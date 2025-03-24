@@ -32,10 +32,10 @@ This project demonstrates the implementation of on-premises Active Directory wit
 
 1. Setup Infrastructure:
     - Azure Resource Group, Virtual Network, and Network Security Group configuration
-    - Deploy two Azure Virtual Machines: Windows Server 2019 (Domain Controller) and Windows 10 (Client)
+    - Deploy two Azure Virtual Machines: Windows Server 2022 (Domain Controller) and Windows 10 (Client)
 
 2. Configure Active Directory:
-    - Install and configure Active Directory Domain Services (AD DS) on the Windows Server 2019 VM
+    - Install and configure Active Directory Domain Services (AD DS) on the Windows Server 2022 VM
     - Create and promote the server to a domain controller
     - Modify DNS settings to static instead of dynamic
 
@@ -87,9 +87,9 @@ A Virtual Network (VNet) is like creating your own private network in the cloud.
 <br />
 
 
-### 3. Virtual Machine (VM) Deployment (Server - Windows Server 2019):
+### 3. Virtual Machine (VM) Deployment (Server - Windows Server 2022):
 
-- Deploy a Windows Server 2019 VM
+- Deploy a Windows Server 2022 VM
 - Place it within the created VNet and subnet
 - NSG (Firewall) is automatically created for the resource
    
@@ -98,7 +98,7 @@ A Virtual Network (VNet) is like creating your own private network in the cloud.
 </p>
 
 <p>
-We're now creating our first virtual machine, a Windows Server 2019 instance, which will act as our domain controller. When creating a VM, Azure automatically assigns a Network Security Group (NSG) to it. Think of an NSG as a virtual firewall, controlling network traffic to and from the VM. This is not a dedicated firewall appliance, but a rule based access control list (ACL) assigned to the Network Interface Card of the virtual machine. For testing purposes, we've enabled RDP (port 3389) access during VM creation. Azure warns that by default, VMs are only accessible within their virtual network, but we've chosen to allow RDP traffic from the public internet. This allows us to remotely connect to the server and configure it.
+We're now creating our first virtual machine, a Windows Server 2022 instance, which will act as our domain controller. When creating a VM, Azure automatically assigns a Network Security Group (NSG) to it. Think of an NSG as a virtual firewall, controlling network traffic to and from the VM. This is not a dedicated firewall appliance, but a rule based access control list (ACL) assigned to the Network Interface Card of the virtual machine. For testing purposes, we've enabled RDP (port 3389) access during VM creation. Azure warns that by default, VMs are only accessible within their virtual network, but we've chosen to allow RDP traffic from the public internet. This allows us to remotely connect to the server and configure it.
 </p>
 
 <p>
@@ -140,7 +140,7 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
     <img width="1375" alt="image" src="https://github.com/user-attachments/assets/6856021f-d0f9-4d7a-8a9a-8f99f7073bb3" />
 </p>
 <p>
-    We're now configuring the Windows Server 2019 VM to use a static private IP address. By default, Azure assigns dynamic IP addresses, which can change after a VM restart. However, our server will function as a Domain Controller (DC) and DNS server. For consistent domain operations, it's crucial that the DC has a fixed, unchanging IP address. This ensures that client machines can reliably locate the server and that DNS resolution remains stable. Setting a static IP address guarantees the server's network location remains constant. Navigate to the virtual Network Interface Card's (NIC) IP Address Configuration and set to "static".
+    We're now configuring the Windows Server 2022 VM to use a static private IP address. By default, Azure assigns dynamic IP addresses, which can change after a VM restart. However, our server will function as a Domain Controller (DC) and DNS server. For consistent domain operations, it's crucial that the DC has a fixed, unchanging IP address. This ensures that client machines can reliably locate the server and that DNS resolution remains stable. Setting a static IP address guarantees the server's network location remains constant. Navigate to the virtual Network Interface Card's (NIC) IP Address Configuration and set to "static".
 </p>
 
 <hr />
@@ -186,36 +186,78 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 </p>
 
 <p>
-    To ensure the Windows 10 client VM can effectively communicate with the domain controller and resolve domain names, we're configuring its primary DNS server to point to the static private IP address of our Windows Server 2019 VM. By default, Azure assigns its own internal DNS servers to VMs. However, this is inappropriate for our setup, as our server will function as the domain controller and authoritative DNS server for our domain. Directing the client to the domain controller's DNS is essential for proper domain join and authentication. This enables the client to locate domain resources and services, ensuring smooth domain operations within our Azure environment.
+    To ensure the Windows 10 client VM can effectively communicate with the domain controller and resolve domain names, we're configuring its primary DNS server to point to the static private IP address of our Windows Server 2022 VM. By default, Azure assigns its own internal DNS servers to VMs. However, this is inappropriate for our setup, as our server will function as the domain controller and authoritative DNS server for our domain. Directing the client to the domain controller's DNS is essential for proper domain join and authentication. This enables the client to locate domain resources and services, ensuring smooth domain operations within our Azure environment.
 </p>
 <hr />
 <br />
   
-4. Define Network Security Group (NSG) / Firewall:
-    - Create an NSG to control inbound and outbound traffic
-    - Allow RDP (port 3389) for management -> Default is exclude all incoming
-    - Allow DNS traffic
+### 7. Preliminary Check of Network Connection between Devices:
+
+- Ping dc-1 from client-1
+- Ping client-1 from dc-1
+
+<p>
+    <img width="643" alt="image" src="https://github.com/user-attachments/assets/7e1a9e82-32f2-4072-8767-6f5be86ac1b2" />
+</p>
+
 
 <img width="1036" alt="image" src="https://github.com/user-attachments/assets/79b77678-8fc7-43bf-8b92-031614547e6c" />
 
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+ping from client to dc-1 success.
+ping frmo dc-1 to client failed --> kinda confused --> troubleshoot
+ping from client to client succeeded --> leads me to believe ICMP is being blocked on client machine (we'd disabled it on server machine, so maybe why ping from client to server is not failing.    
 </p>
-
-
 
 <p>
 <img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 
+<hr />
+<br />
 
+### 8. Verify Client Machine DNS Settings to Server Private IP Address
 
-5. Active Directory Domain Services (AD DS) Configuration (Server):
-    - Install AD DS and DNS roles
-    - Promote the server to a domain controller
-    - Create a new forest and domain
-    - Configure DNS to point to the server's private IP
+<p>
+    <img width="808" alt="image" src="https://github.com/user-attachments/assets/5157b705-5c56-47a3-91d1-8ce042665b89" />
+</p>
+<p>
+    Needed to restart machine. Could've done a dns flush, but didn't think of it before restarting machine.
+</p>
 
+<hr />
+<br />
+
+### 9. Install Active Directory Domain Services (AD DS) on Server:
+    
+- Install AD DS and DNS roles via Server Manager -> Add Roles and Features
+- Promote the server to a domain controller
+- Create a new forest and domain
+- Configure DNS to point to the server's private IP
+
+##### Installing AD DS
+<p>
+    <img width="1109" alt="image" src="https://github.com/user-attachments/assets/d57e2876-56e9-4518-9813-49a02ddfa2aa" />
+</p>
+<p>
+    <img width="919" alt="image" src="https://github.com/user-attachments/assets/67d6660c-62f9-4139-8c5f-5c517d20823d" />
+</p>
+
+##### Promote Server to Domain Controller
+<p>
+    <img width="1420" alt="image" src="https://github.com/user-attachments/assets/5a49aad3-e7dc-48f3-b790-efbaece12c62" />
+</p>
+
+##### Adding/Creating a New Forrest/Domain
+<p>
+    <img width="1271" alt="image" src="https://github.com/user-attachments/assets/4f5c808b-89b8-4131-9a66-b2a1e20ab852" />
+</p>
+
+##### Decide on NetBIOS Domain Name
+- NetBIOS Domain Name is what shows up on login screen, so we have the option of "shrinking" the domain name so it doesn't take up too much real estate on the login screen.
+<p>
+    <img width="944" alt="image" src="https://github.com/user-attachments/assets/2c2a33cc-5ddd-49d2-b0df-b9ae9353a5df" />
+</p>
 
 <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
