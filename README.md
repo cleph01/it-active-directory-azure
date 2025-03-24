@@ -130,7 +130,7 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 <hr />
 <br />
 
-### 4. Set Server's (Private) IP address to "static" vs. "dynamic"
+### 5. Set Server's (Private) IP address to "static" vs. "dynamic"
 
 - Select the Server VM
 - Navigate to Network -> Network Settings
@@ -146,7 +146,7 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 <hr />
 <br />
 
-### 5. Disable Server's Windows Defender Firewall 
+### 6. Disable Server's Windows Defender Firewall 
 
 - RDP into Server VM
 - Navigate to Windows Defender Firewall -> Windows Defender Firewall Properties
@@ -168,7 +168,7 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 <hr />
 <br />
 
-### 6. Configure the Client VM's primary DNS server to be the private IP address of the server VM
+### 7. Configure the Client VM's primary DNS server to be the private IP address of the server VM
 
 - Note Server's Private IP Address
 - Edit/Update Virtual NIC Inside Azure
@@ -191,7 +191,7 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 <hr />
 <br />
   
-### 7. Preliminary Check of Network Connection between Devices:
+### 8. Preliminary Check of Network Connection between Devices:
 
 - Ping dc-1 from client-1
 - Ping client-1 from dc-1
@@ -216,7 +216,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <hr />
 <br />
 
-### 8. Verify Client Machine DNS Settings to Server Private IP Address
+### 9. Verify Client Machine DNS Settings to Server Private IP Address
 
 <p>
     <img width="808" alt="image" src="https://github.com/user-attachments/assets/5157b705-5c56-47a3-91d1-8ce042665b89" />
@@ -228,7 +228,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <hr />
 <br />
 
-### 9. Install Active Directory Domain Services (AD DS) on Server:
+### 10. Install Active Directory Domain Services (AD DS) on Server:
     
 - Install AD DS and DNS roles via Server Manager -> Add Roles and Features
 - Promote the server to a domain controller
@@ -268,15 +268,64 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <p>
     <img width="560" alt="image" src="https://github.com/user-attachments/assets/3e176ee6-7cab-407d-91d5-8decbebbb362" />
 </p>
+
+- Now that we've installed Active Directory, all users will exist within the domain vs. locally. This will permit user, permission, and access management from the domain.
+
+<hr />
+<br />
+
+### 11. Create a Domain Admin user within the domain
+
+- Navigate to Server Manager -> Tools -> Active Directory Users and Computers -> "mydomain.com"
+- Create two Organizational Units (OU):
+    - _ADMINS
+    - _EMPLOYEES
+- Add a New User "Jane Doe" with username "jane_admin" to the "Domain Admins" Security Group. 
+
+#### Open Active Directory Users and Computers
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    <img width="1432" alt="image" src="https://github.com/user-attachments/assets/1e56409d-63ea-4816-b65b-52f8083fe059" />
+</p>
+
+#### Create the OUs
+<p>
+    <img width="910" alt="image" src="https://github.com/user-attachments/assets/967efd01-3acc-47aa-8d9b-df9112fffe74" />
+</p>
+<p>
+    <img width="905" alt="image" src="https://github.com/user-attachments/assets/b9b8a60a-7a3e-4921-899a-44a5713d343d" />
+</p>
+
+#### Add Jane Doe as a Domain Admin in the _ADMINS OU
+<p>
+    <img width="883" alt="image" src="https://github.com/user-attachments/assets/ac2d7e7a-79a3-4818-861b-23624f084868" />
+</p>
+
+- This account is not an Admin yet by virtue of being part of the _ADMINS OU
+
+<p>
+    <img width="927" alt="image" src="https://github.com/user-attachments/assets/7ad8bef8-b29c-45c0-bbb1-964962403e49" />
+</p>
+
+#### It needs to be added to the "Domain Admins" (built-in) Security Group
+
+<p>
+    <img width="743" alt="image" src="https://github.com/user-attachments/assets/ecf51687-de9b-4648-94ae-12427a2b95af" />
 </p>
 
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+    <img width="743" alt="image" src="https://github.com/user-attachments/assets/dc5cb4e8-666f-4113-806b-4e2aa194831a" />
 </p>
 
+<p>
+    <img width="804" alt="image" src="https://github.com/user-attachments/assets/b946e468-2210-4545-a665-7f0f92d66c0d" />
+</p>
 
+<p>
+    <img width="830" alt="image" src="https://github.com/user-attachments/assets/3edf148b-255f-4701-a7d1-9410a71bcec2" />
+</p>
+
+<hr />
+<br />
 
 7. Client Domain Join:
     - Join the Windows 10 VM to the created domain
