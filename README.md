@@ -2,15 +2,46 @@
 <img src="https://i.imgur.com/pU5A58S.png" alt="Microsoft Active Directory Logo"/>
 </p>
 
-<h1>On-premises Active Directory Deployed in the Cloud (Azure)</h1>
-This project demonstrates the implementation of on-premises Active Directory within Azure Virtual Machines.<br />
+<h1>Implementing On-Premises Active Directory (AD) in the Cloud (Azure)</h1>
 
+## Project Overview
+
+This project demonstrates the implementation of Active Directory (AD) within Azure Virtual Machines, showcasing a fundamental component of enterprise network management.
+
+### What is Active Directory?
+
+* Active Directory is a directory service developed by Microsoft.
+* It centrally manages users, computers, and other network resources.
+* It provides authentication, authorization, and policy management.
+* It enables secure and efficient control over a network environment.
+
+### Why is it Important?
+
+* Centralized Management: Simplifies user and resource administration.
+* Enhanced Security: Enforces security policies and controls access.
+* Improved Efficiency: Streamlines network operations and resource sharing.
+
+### Deployment in Azure
+
+* Simulates a typical on-premises setup in a cloud environment.
+* Highlights how organizations can leverage Azure's infrastructure for domain services.
+* Allows for exploration of core AD concepts:
+    * Domain creation
+    * User management
+    * Group policies
+    * DNS integration
+
+### Project Goal
+
+To provide a practical understanding of how AD facilitates centralized network administration within an Azure environment.
 <!---
 <h2>Video Demonstration</h2>
 
 - ### [YouTube: How to Deploy on-premises Active Directory within Azure Compute](https://www.youtube.com)
 
 --->
+
+<br />
 
 <h2>Environments and Technologies Used</h2>
 
@@ -200,8 +231,9 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
     <img width="643" alt="image" src="https://github.com/user-attachments/assets/7e1a9e82-32f2-4072-8767-6f5be86ac1b2" />
 </p>
 
-
-<img width="1036" alt="image" src="https://github.com/user-attachments/assets/79b77678-8fc7-43bf-8b92-031614547e6c" />
+<p>
+    <img width="1036" alt="image" src="https://github.com/user-attachments/assets/79b77678-8fc7-43bf-8b92-031614547e6c" />
+</p>
 
 <p>
 ping from client to dc-1 success.
@@ -209,9 +241,6 @@ ping frmo dc-1 to client failed --> kinda confused --> troubleshoot
 ping from client to client succeeded --> leads me to believe ICMP is being blocked on client machine (we'd disabled it on server machine, so maybe why ping from client to server is not failing.    
 </p>
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
 
 <hr />
 <br />
@@ -324,6 +353,10 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
     <img width="830" alt="image" src="https://github.com/user-attachments/assets/3edf148b-255f-4701-a7d1-9410a71bcec2" />
 </p>
 
+#### Logoff and Login with "jane_admin"
+<p>
+    <img width="550" alt="image" src="https://github.com/user-attachments/assets/bd3ee05f-7b7f-46d0-8274-ceb881970fd6" />
+</p>
 <hr />
 <br />
 
