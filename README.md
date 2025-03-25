@@ -652,6 +652,30 @@ Click OK.
    <img width="729" alt="image" src="https://github.com/user-attachments/assets/544f1812-9068-4678-997e-e34a2806e394" />
 </p>
 
+#### Back in Business
+<p>
+   <img width="527" alt="image" src="https://github.com/user-attachments/assets/c4b1ec95-be2d-4055-a510-7fb2edbc2b32" />
+
+</p>
+
+
+#### Resetting Password
+
+- from the domain, right click on user and see
+
+<p>
+   <img width="682" alt="image" src="https://github.com/user-attachments/assets/509867fb-6996-4716-aa33-de8120c680f1" />
+</p>
+
+#### Disable/Enable Account (Maybe if compromised)
+
+<p>
+   <img width="726" alt="image" src="https://github.com/user-attachments/assets/35542e7a-8bff-44a6-b693-18448b211bad" />
+</p>
+
+
+---
+
 9. Verification:
     - Verify DNS resolution
     - Verify domain join and user authentication
