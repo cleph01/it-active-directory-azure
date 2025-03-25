@@ -360,18 +360,46 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <hr />
 <br />
 
-7. Client Domain Join:
-    - Join the Windows 10 VM to the created domain
-    - Disable Microsoft Defender to allow Domain Controller network communication
+### 12. Client Domain Join:
+- Join the Windows 10 VM to the created domain
+- Disable Microsoft Defender to allow Domain Controller network communication
 
-
+#### Change from Workgroup to Domain
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+   <img width="1028" alt="image" src="https://github.com/user-attachments/assets/17372f04-fe50-455e-af94-287d2648c773" />
 </p>
 
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+   System -> Advanced System Setting -> Computer Name -> 
 </p>
+
+<p>
+   <img width="1020" alt="image" src="https://github.com/user-attachments/assets/22f3a9bb-e509-42a6-a557-8779105a5755" />
+</p>
+
+#### Domain found because of DNS. Use Admin account to Join
+<p>
+   <img width="1007" alt="image" src="https://github.com/user-attachments/assets/703cbb5b-2418-4de9-982c-af628fb37a1a" />
+</p>
+
+<p>
+   <img width="1069" alt="image" src="https://github.com/user-attachments/assets/bca52605-6b03-4b38-b69d-3d6e7919dbc5" />
+</p>
+
+<p>
+   <img width="1017" alt="image" src="https://github.com/user-attachments/assets/27278ec7-f213-4606-b910-b8c2dae40ec0" />
+</p>
+
+<p>
+   <img width="1004" alt="image" src="https://github.com/user-attachments/assets/c172262d-d8f3-47ec-aa75-159f71c87777" />
+</p>
+
+#### Create a new Organizational Unit (OU) for Client Machines
+
+<p>
+   <img width="820" alt="image" src="https://github.com/user-attachments/assets/7747e3e7-67cc-48c3-9fbe-70ebf4c0b755" />
+</p>
+
 
 8. Active Directory User and Group Creation:
     - Create Organizational Units (OUs) for organization
