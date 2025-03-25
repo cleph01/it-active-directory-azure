@@ -345,6 +345,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
     <img width="743" alt="image" src="https://github.com/user-attachments/assets/dc5cb4e8-666f-4113-806b-4e2aa194831a" />
 </p>
 
+
 <p>
     <img width="804" alt="image" src="https://github.com/user-attachments/assets/b946e468-2210-4545-a665-7f0f92d66c0d" />
 </p>
@@ -386,6 +387,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
    <img width="1069" alt="image" src="https://github.com/user-attachments/assets/bca52605-6b03-4b38-b69d-3d6e7919dbc5" />
 </p>
 
+<!---
 <p>
    <img width="1017" alt="image" src="https://github.com/user-attachments/assets/27278ec7-f213-4606-b910-b8c2dae40ec0" />
 </p>
@@ -399,21 +401,255 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <p>
    <img width="820" alt="image" src="https://github.com/user-attachments/assets/7747e3e7-67cc-48c3-9fbe-70ebf4c0b755" />
 </p>
+--->
 
+### 13. Create Active Directory User Accounts:
 
-8. Active Directory User and Group Creation:
-    - Create Organizational Units (OUs) for organization
-    - Create user accounts with varying permissions
-    - Create security groups, and add users to them
-    - Test user logins, and group policy
+- Create user accounts with varying permissions
+- Create security groups, and add users to them
+- Test user logins, and group policy
 
+#### Use Powershell ISE (on Server VM) to Run Script to Create Users
 
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+   <img width="851" alt="image" src="https://github.com/user-attachments/assets/3945448a-10d8-4a09-8773-91d4503d8bde" />
 </p>
 
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+   <img width="704" alt="image" src="https://github.com/user-attachments/assets/815598c4-16ba-4d2f-8f1c-4cab34324398" />
+</p>
+
+### 14. Create Group Policy to Allow All Domain Users to Connect to ANY Client Machine in the _CLIENT OU via Remote Desktop
+
+- The "Allow log on through Remote Desktop Services" user right determines which users are allowed to establish remote desktop sessions to the target computer.
+- By adding the "Domain Users" group to this right, you are granting all domain users the permission to RDP into the client VM.
+- Linking the GPO to the OU where the client resides ensures that the client recieves the GPO.
+- Forcing the gpupdate on the client ensures the client recieves the policy immediately, rather than waiting for the normal gpupdate interval.
+
+<p>
+   <img width="455" alt="image" src="https://github.com/user-attachments/assets/5185c299-4995-4fcf-81bf-3da9695a50bf" />
+</p>
+<p>
+   <img width="927" alt="image" src="https://github.com/user-attachments/assets/31e92fff-ce55-4f77-9eeb-51f9fb5bd084" />
+</p>
+<p>
+   <img width="662" alt="image" src="https://github.com/user-attachments/assets/6818ee45-95b9-46c8-8c96-b57b1e207853" />
+</p>
+
+#### Edit Created GPO to allow Remote desktop
+<p>
+   Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Local Policies1 -> User Rights Assignment
+</p>
+<p>
+   <img width="1043" alt="image" src="https://github.com/user-attachments/assets/ef0ec565-2d92-48bf-83a1-ad6f5f03900c" />
+</p>
+
+<p>
+   <img width="1043" alt="image" src="https://github.com/user-attachments/assets/590faaf3-088a-4e42-93b3-ea8665672ca9" />
+</p>
+
+#### Double click on Double-click on "Allow log on through Remote Desktop Services."
+Check the "Define these policy settings" box.
+Click "Add User or Group."
+Type "Domain Users" and click "Check Names."
+Click "OK" to add "Domain Users."
+
+<p>
+   <img width="1013" alt="image" src="https://github.com/user-attachments/assets/02443b9b-09ca-4532-bbbe-77a343b1c6e2" />
+</p>
+
+<p>
+   <img width="1364" alt="image" src="https://github.com/user-attachments/assets/20f3104f-292b-46ad-b08b-44b0f6c1bb0c" />
+</p>
+
+
+#### Link the GPO to the Client's OU:
+
+- In the Group Policy Management console, navigate to the Organizational Unit (OU) that contains your Windows 10 client VM.
+- Right-click on the OU and select "Link an Existing GPO."
+- Select the "Allow Domain Users RDP" GPO you created.
+- Click "OK."
+
+<p>
+   <img width="1260" alt="image" src="https://github.com/user-attachments/assets/2f164d9a-23ec-4852-a87c-9a6b1e751d17" />
+</p>
+
+#### Test RDP Access Prior to Group Policy Update (on the Client VM):
+- use newly created user to test Remote Access
+
+<p>
+   <img width="883" alt="image" src="https://github.com/user-attachments/assets/8d6e9bde-4355-47b1-b078-f2f881388fdd" />
+</p>
+<p>
+   <img width="788" alt="image" src="https://github.com/user-attachments/assets/87fae742-d4ee-4581-92da-a1b9436fca3f" />
+</p>
+<p>
+   <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
+</p>
+
+#### Force Group Policy Update (on the Client VM):
+
+- On the Windows 10 client VM, open a command prompt as administrator.
+- Run the command gpupdate /force.
+- This will force the client to retrieve and apply the new GPO.
+
+<p>
+   <img width="591" alt="image" src="https://github.com/user-attachments/assets/1adb89e5-f0b2-42aa-9a35-42271989d813" />
+</p>
+
+#### Test RDP Access (with Prev. Attempted User):
+
+- From another domain-joined machine, or from a machine that has network access to the Client VM, attempt to RDP into the client using a domain user account.
+
+<p>
+   <img width="819" alt="image" src="https://github.com/user-attachments/assets/c157dab6-8030-46ca-bd55-c1cca9b4468b" />
+</p>
+<p>
+   <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
+</p>
+
+#### Failed. So, restarted/rebooted the machine
+
+### Need to Add Remote Desktop Users to Security group
+
+The "Allow log on through Remote Desktop Services" user right grants the ability to initiate an RDP session, but it doesn't automatically grant the permission to connect to the remote computer
+
+Add Domain Users to the Remote Desktop Users Group:
+
+In the Group policy editor, navigate to:
+Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Restricted Groups.
+Right click, and select "Add Group".   
+Type "Remote Desktop Users" and click OK.
+Under "Members of this group" click "Add".
+Type "Domain Users" and click OK.
+Click OK.
+<p>
+   <img width="807" alt="image" src="https://github.com/user-attachments/assets/8afcbbfd-d86e-4c5f-95be-f5665a476af6" />
+</p>
+
+<p>
+   <img width="848" alt="image" src="https://github.com/user-attachments/assets/bf48a530-8585-4a39-bd7d-b36c72461d1a" />
+</p>
+
+<p>
+   <img width="559" alt="image" src="https://github.com/user-attachments/assets/529e4e36-55ed-4b5a-958a-399927e68f8f" />
+</p>
+
+#### Force Group Policy Update AGAIN (on the Client VM):
+
+- On the Windows 10 client VM, open a command prompt as administrator.
+- Run the command gpupdate /force.
+- This will force the client to retrieve and apply the new GPO
+
+<p>
+   <img width="625" alt="image" src="https://github.com/user-attachments/assets/520ea852-0303-44ea-9c9f-055ae652f1f8" />
+</p>
+
+#### Test RDP Access AGAIN (with Prev. Attempted User):
+
+- From another domain-joined machine, or from a machine that has network access to the Client VM, attempt to RDP into the client using a domain user account.
+
+#### SUCCESS!
+<p>
+   <img width="1168" alt="image" src="https://github.com/user-attachments/assets/f123ea29-6b1f-4641-aa1e-a2ac9358db9d" />
+</p>
+
+### 15. Create New VM, Join to Domain, and Test RDP GPO Inheritance
+
+#### Configure new VM's DNS server to be DC server private IP address
+
+<p>
+   <img width="781" alt="image" src="https://github.com/user-attachments/assets/4178753c-7313-4afc-8756-14703a6ebf95" />
+</p>
+
+#### DNS setting on machine still show old DNS
+<p>
+   <img width="798" alt="image" src="https://github.com/user-attachments/assets/2d050b1d-840f-4b79-a555-16fbc396c62b" />
+</p>
+
+#### Test with DNS Flush -> Didn't Work
+<p>
+   <img width="771" alt="image" src="https://github.com/user-attachments/assets/29709c64-efd7-4eac-9281-48991ed2fa47" />
+</p>
+
+#### Test with release -> renew 
+
+- ` ipconfig /release ` broke my RDP connection, so had to restart the VM which flushed the DNS so didn't get a chance to teste ` ipconfig /renew `
+- But, new VM DNS Server IP is the Domain Controller's Private IP. now
+  
+<p>
+   <img width="909" alt="image" src="https://github.com/user-attachments/assets/bd76fee1-aa4f-46b5-ba60-aa9992f72f30" />
+</p>
+
+#### Join Domain
+
+<p>
+   <img width="854" alt="image" src="https://github.com/user-attachments/assets/e4195fc0-97cd-466c-887d-3a7fdedcf034" />
+</p>
+
+#### Domain Join Success -> but not part of OU -> test RDP to check GPO from a non-OU perspective
+<p>
+   <img width="771" alt="image" src="https://github.com/user-attachments/assets/901a3b4b-9dc4-4ee7-b88f-4ca4f6503d1c" />
+</p>
+
+#### Denied
+
+<p>
+   <img width="619" alt="image" src="https://github.com/user-attachments/assets/dfa27028-c77f-47e5-80cb-c9970e1fcb14" />
+</p>
+
+#### Manually move computer to _CLIENT OU
+<p>
+   <img width="678" alt="image" src="https://github.com/user-attachments/assets/a452bc19-e10b-4609-aeca-576efb577919" />
+</p>
+
+#### Was denied and while researching whether to reboot or gpupdate /force to apply the inheretance -> the GPO flowed down to the new VM
+
+<p>
+   <img width="897" alt="image" src="https://github.com/user-attachments/assets/4b4eb316-e866-4052-8e9d-dedbc57b7399" />
+</p>
+
+<p>
+   <img width="307" alt="image" src="https://github.com/user-attachments/assets/eab99bf7-dd23-421f-95cd-e6f8f1932089" />
+</p>
+
+### 15. Create Group Policy to enforce Identity and Access Management (IAM) security policy
+
+- Password lockout policy is not setup by default
+- in the DC
+- pick a user
+
+#### We can set up a new Group Policy, but instead we're going to edit the Default Domain Policy since the Password lockout should apply to the whole domain
+<p>
+   <img width="775" alt="image" src="https://github.com/user-attachments/assets/17e38a5e-bf2c-4973-9619-10eb116187fc" />
+</p>
+
+#### No lockout
+<p>
+   <img width="862" alt="image" src="https://github.com/user-attachments/assets/25502274-9776-4604-9781-4aab2a575d73" />
+</p>
+
+#### 5 Login attemps
+<p>
+   <img width="1006" alt="image" src="https://github.com/user-attachments/assets/b3f32194-5a07-4691-9258-ebc2c8efa06f" />
+</p>
+<p>
+   <img width="1146" alt="image" src="https://github.com/user-attachments/assets/5d2d6d09-dd5e-4af9-a06b-7b2b6e5b587c" />
+</p>
+
+#### On cliet 2 (new VM) I gpupdate /force
+<p>
+   <img width="621" alt="image" src="https://github.com/user-attachments/assets/bdafc0cd-3392-422f-a695-7798096163fc" />
+</p>
+
+#### Attemp 5+ bad login attempts
+<p>
+   <img width="604" alt="image" src="https://github.com/user-attachments/assets/907983cb-a093-4518-ad34-c33ac1d7f14b" />
+</p>
+
+#### Unlock account on DC
+<p>
+   <img width="729" alt="image" src="https://github.com/user-attachments/assets/544f1812-9068-4678-997e-e34a2806e394" />
 </p>
 
 9. Verification:
