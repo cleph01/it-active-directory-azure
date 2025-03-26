@@ -73,7 +73,7 @@ To provide a practical understanding of how AD facilitates centralized network a
     * **Created domain user accounts** with varying permissions within the OUs.
     * **Created security groups** to manage user access to resources.
     * **Verified domain user authentication** by logging into the client VM with domain credentials.
-    * **Verified basic Group Policy application** (this will be expanded in later steps).
+    * **Verified basic Group Policy application** by testing Remote Desktop access and Password Lockout configuration.
 
 <h2>Deployment and Configuration Steps</h2>
 
