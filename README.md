@@ -1,8 +1,8 @@
+# Azure Active Directory Lab: Implementing On-Premises AD in the Cloud (Azure)
+
 <p align="center">
 <img src="https://i.imgur.com/pU5A58S.png" alt="Microsoft Active Directory Logo"/>
 </p>
-
-<h1>Implementing On-Premises Active Directory (AD) in the Cloud (Azure)</h1>
 
 ## Project Overview
 
@@ -34,18 +34,11 @@ This project demonstrates the implementation of Active Directory (AD) within Azu
 ### Project Goal
 
 To provide a practical understanding of how AD facilitates centralized network administration within an Azure environment.
-<!---
-<h2>Video Demonstration</h2>
-
-- ### [YouTube: How to Deploy on-premises Active Directory within Azure Compute](https://www.youtube.com)
-
---->
-
 <br />
 
 <h2>Environments and Technologies Used</h2>
 
-- Microsoft Azure 
+- Microsoft Azure
     - Virtual Machines/Compute
     - Virtual Network
     - Network Security Groups (Firewall)
@@ -53,8 +46,8 @@ To provide a practical understanding of how AD facilitates centralized network a
 - Remote Desktop
 - DNS
 - PowerShell
-  
-<h2>Operating Systems Used </h2>
+
+<h2>Operating Systems Used</h2>
 
 - Windows Server 2022
 - Windows 10 (21H2)
@@ -62,26 +55,31 @@ To provide a practical understanding of how AD facilitates centralized network a
 <h2>High-Level Deployment and Configuration Steps</h2>
 
 1. Setup Infrastructure:
-    - Azure Resource Group, Virtual Network, and Network Security Group configuration
-    - Deploy two Azure Virtual Machines: Windows Server 2022 (Domain Controller) and Windows 10 (Client)
+    * **Created an Azure Resource Group** to organize all project resources for simplified management.
+    * **Configured a Virtual Network (VNet)** with a defined address space to establish a private network in Azure.
+    * **Configured a Network Security Group (NSG)** to control inbound and outbound network traffic for security.
+    * **Deployed a Windows Server 2022 Virtual Machine** to serve as the Active Directory Domain Controller.
+    * **Deployed a Windows 10 Virtual Machine** to act as a domain-joined client for testing.
 
 2. Configure Active Directory:
-    - Install and configure Active Directory Domain Services (AD DS) on the Windows Server 2022 VM
-    - Create and promote the server to a domain controller
-    - Modify DNS settings to static instead of dynamic
+    * **Installed Active Directory Domain Services (AD DS) role** on the Windows Server 2022 VM.
+    * **Promoted the Windows Server 2022 VM to a Domain Controller**, establishing the Active Directory domain.
+    * **Configured the Domain Controller's IP address to be static** for reliable DNS and domain services.
 
 3. Integrate Client Machine and User Management:
-    - Join Windows 10 client VM to Domain
-    - Configure IPV4 settings to point to Domain Controller for DNS instead of Azure's DNS
-    - Create users, groups, and organizational units (OUs) within Active Directory
-    - Verify user authentication and group policy.
+    * **Joined the Windows 10 client VM to the newly created Active Directory domain.**
+    * **Configured the client VM's IPv4 DNS settings** to point to the Domain Controller's static private IP address, ensuring proper domain resolution.
+    * **Created Organizational Units (OUs)** (_ADMINS, _EMPLOYEES, _CLIENT) to organize domain objects.
+    * **Created domain user accounts** with varying permissions within the OUs.
+    * **Created security groups** to manage user access to resources.
+    * **Verified domain user authentication** by logging into the client VM with domain credentials.
+    * **Verified basic Group Policy application** (this will be expanded in later steps).
 
 <h2>Deployment and Configuration Steps</h2>
 
-
 ### 1. Create a Resource Group:
 
-- Create a new Azure Resource Group to contain all resources
+- **Created a new Azure Resource Group** named appropriately to contain all project-related Azure resources.
 
 <p>
 <img width="1118" alt="image" src="https://github.com/user-attachments/assets/29b297df-862f-4a0c-a9da-35ef2f72dd14" />
@@ -92,38 +90,33 @@ Azure Resource Groups are logical containers (like folders) that hold related Az
 
 </p>
 
-
 <hr />
 <br />
 
 ### 2. Establish Virtual Network (VNet) and Subnet:
 
-- Create a VNet with a suitable address space
-- Create a subnet within the VNet for the VM
-
+- **Created a Virtual Network (VNet)** with the address space `10.0.0.0/16` to provide a private network for Azure resources.
+- **Created a subnet** within the VNet with the address range `10.0.0.0/24` to segment the network and house the VMs.
 
 <p>
 <img width="854" alt="image" src="https://github.com/user-attachments/assets/2c17c14a-34c0-4a34-acda-6df84b2bb28b" />
 </p>
 
 <p>
-We're choosing to manually create our virtual network in-lieau of the auto-creation that comes from creating a virtual machine.
+We're choosing to manually create our virtual network in-lieu of the auto-creation that comes from creating a virtual machine.
 </p>
 <p>
 A Virtual Network (VNet) is like creating your own private network in the cloud. We're setting up a VNet to allow our virtual machines to communicate with each other securely. We'll use the address space 10.0.0.0/16, which means we have 65,536 possible IP addresses for our network. Within this VNet, we'll create a subnet, 10.0.0.0/24, which is a smaller part of the VNet, providing 256 addresses. This subnet will house our VMs and help manage network traffic efficiently.
 </p>
 
-
 <hr />
 <br />
 
-
 ### 3. Virtual Machine (VM) Deployment (Server - Windows Server 2022):
 
-- Deploy a Windows Server 2022 VM
-- Place it within the created VNet and subnet
-- NSG (Firewall) is automatically created for the resource
-   
+- **Deployed a Windows Server 2022 Virtual Machine** named `dc-1` within the created VNet and subnet.
+- **Observed that a Network Security Group (NSG)** was automatically created by Azure for this VM to act as a virtual firewall.
+
 <p>
 <img width="970" alt="image" src="https://github.com/user-attachments/assets/e488a121-8630-4517-a71f-c7ee4bbc5df7" />
 </p>
@@ -137,17 +130,13 @@ We're now creating our first virtual machine, a Windows Server 2022 instance, wh
 
 </p>
 
-
 <hr />
 <br />
 
-
 ### 4. Virtual Machine (VM) Deployment (Client - Windows 10):
 
-- Deploy a Windows 10 VM
-- Place it within the same VNet and subnet
-- NSG (Firewall) is automatically created for the resource
-
+- **Deployed a Windows 10 Virtual Machine** named `client-1` within the same VNet and subnet.
+- **Observed that a Network Security Group (NSG)** was automatically created by Azure for this VM.
 
 <p>
 <img width="1369" alt="image" src="https://github.com/user-attachments/assets/ae58c8d8-f25a-468b-b93a-d9ee15446a16" />
@@ -163,9 +152,9 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 
 ### 5. Set Server's (Private) IP address to "static" vs. "dynamic"
 
-- Select the Server VM
-- Navigate to Network -> Network Settings
-- Edit inside the NIC (Network Interface Card) / IP Configuration
+- **Selected the Server VM (`dc-1`).**
+- **Navigated to the Network settings** for the VM.
+- **Edited the IP configuration** of the Network Interface Card (NIC) to change the assignment from "Dynamic" to "**Static**".
 
 <p>
     <img width="1375" alt="image" src="https://github.com/user-attachments/assets/6856021f-d0f9-4d7a-8a9a-8f99f7073bb3" />
@@ -177,11 +166,11 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 <hr />
 <br />
 
-### 6. Disable Server's Windows Defender Firewall 
+### 6. Disable Server's Windows Defender Firewall
 
-- RDP into Server VM
-- Navigate to Windows Defender Firewall -> Windows Defender Firewall Properties
-- Disable (set to "off") for Domain, Private, and Public Profiles
+- **RDP'd into the Server VM (`dc-1`).**
+- **Navigated to Windows Defender Firewall Properties.**
+- **Set the Firewall state to "Off"** for the Domain, Private, and Public Profiles.
 
 <p>
     <img width="1045" alt="image" src="https://github.com/user-attachments/assets/12726d3f-f568-4efb-9b32-ab79ed90a1db" />
@@ -201,10 +190,10 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 
 ### 7. Configure the Client VM's primary DNS server to be the private IP address of the server VM
 
-- Note Server's Private IP Address
-- Edit/Update Virtual NIC Inside Azure
-    - Networking -> Network Settings -> Network Interface / IP Configurations -> DNS Servers
-
+- **Noted the private IP address** of the Server VM (`dc-1`).
+- **Navigated to the Network settings** of the Client VM (`client-1`) in the Azure portal.
+- **Edited the DNS servers setting** within the Network Interface (NIC) IP configurations.
+- **Selected "Custom DNS"** and entered the private IP address of the Server VM as the primary DNS server.
 
 <p>
     <img width="592" alt="image" src="https://github.com/user-attachments/assets/a3695e86-ad82-44c4-a1cd-f66e19499631" />
@@ -221,11 +210,14 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
 </p>
 <hr />
 <br />
-  
+
 ### 8. Preliminary Check of Network Connection between Devices:
 
-- Ping dc-1 from client-1
-- Ping client-1 from dc-1
+As a preliminary network connectivity check, ICMP (Internet Control Message Protocol) echo requests (pings) were initiated between the server (`dc-1`) and the client (`client-1`).
+
+* **Ping from `client-1` to `dc-1` (using the Domain Controller's private IP address): Successful.** This confirms basic IP-level reachability from the client to the server.
+
+* **Ping from `dc-1` to `client-1` (using the client's private IP address): Initially Failed.** This indicates a potential blockage of ICMP traffic from the server to the client.
 
 <p>
     <img width="643" alt="image" src="https://github.com/user-attachments/assets/7e1a9e82-32f2-4072-8767-6f5be86ac1b2" />
@@ -235,10 +227,15 @@ Next, we're deploying a Windows 10 virtual machine, which will be our domain-joi
     <img width="1036" alt="image" src="https://github.com/user-attachments/assets/79b77678-8fc7-43bf-8b92-031614547e6c" />
 </p>
 
+#### Troubleshooting this discrepancy, the following observations were made:
+
+* **Ping from `client-1` to `client-1` (using its own private IP address): Successful.** This confirms that ICMP is generally functional on the client machine itself.
+
 <p>
-ping from client to dc-1 success.
-ping frmo dc-1 to client failed --> kinda confused --> troubleshoot
-ping from client to client succeeded --> leads me to believe ICMP is being blocked on client machine (we'd disabled it on server machine, so maybe why ping from client to server is not failing.    
+   This led to the initial hypothesis that <strong>ICMP inbound traffic might be blocked by a firewall on the `client-1` machine</strong>.
+</p>
+<p>
+   While the Windows Firewall was intentionally disabled on the server (`dc-1`) for lab simplicity, the firewall status on the client (`client-1`) had not yet been explicitly modified. This could explain why the server couldn't ping the client, but the client could ping the server (outbound ICMP was likely allowed by default).
 </p>
 
 
@@ -246,6 +243,11 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <br />
 
 ### 9. Verify Client Machine DNS Settings to Server Private IP Address
+
+- **RDP'd into `client-1`** and used `ipconfig /all` to inspect the DNS server settings.
+- **Observed that the DNS server was still pointing to the old Azure DNS server.**
+- **Restarted the `client-1` VM** to ensure the new DNS settings were applied.
+- **Confirmed via `ipconfig /all`** that the primary DNS server was now the private IP address of `dc-1`.
 
 <p>
     <img width="808" alt="image" src="https://github.com/user-attachments/assets/5157b705-5c56-47a3-91d1-8ce042665b89" />
@@ -258,11 +260,22 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <br />
 
 ### 10. Install Active Directory Domain Services (AD DS) on Server:
-    
-- Install AD DS and DNS roles via Server Manager -> Add Roles and Features
-- Promote the server to a domain controller
-- Create a new forest and domain
-- Configure DNS to point to the server's private IP
+
+- **Opened Server Manager** on `dc-1`.
+- **Initiated the "Add Roles and Features Wizard".**
+- **Selected the "Active Directory Domain Services" and "DNS Server" roles** for installation.
+- **Proceeded with the installation process.**
+- **After installation, initiated the "Active Directory Domain Services Configuration Wizard".**
+- **Selected the option to "Add a new forest".**
+- **Specified a root domain name** (e.g., `mydomain.com`).
+- **Configured the forest and domain functional levels.**
+- **Defined a Directory Services Restore Mode (DSRM) password.**
+- **Reviewed the DNS options and accepted the defaults.**
+- **Confirmed the NetBIOS domain name.**
+- **Reviewed the paths for the AD DS database, log files, and SYSVOL.**
+- **Reviewed the prerequisites check and proceeded with the installation.**
+- **The server automatically rebooted** after the domain controller promotion.
+- **Logged back into the server** using domain administrator credentials, confirming the successful promotion to a domain controller.
 
 #### Installing AD DS
 <p>
@@ -274,7 +287,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 
 #### Promote Server to Domain Controller
 <p>
-    <img width="1420" alt="image" src="https://github.com/user-attachments/assets/5a49aad3-e7dc-48f3-b790-efbaece12c62" />
+   <img width="1420" alt="image" src="https://github.com/user-attachments/assets/5a49aad3-e7dc-48f3-b790-efbaece12c62" />
 </p>
 
 #### Adding/Creating a New Forrest/Domain
@@ -305,11 +318,11 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 
 ### 11. Create a Domain Admin user within the domain
 
-- Navigate to Server Manager -> Tools -> Active Directory Users and Computers -> "mydomain.com"
-- Create two Organizational Units (OU):
-    - _ADMINS
-    - _EMPLOYEES
-- Add a New User "Jane Doe" with username "jane_admin" to the "Domain Admins" Security Group. 
+- **Opened "Active Directory Users and Computers"** on `dc-1`.
+- **Created two Organizational Units (OUs):** `_ADMINS` and `_EMPLOYEES` to organize user accounts.
+- **Created a new user account** named "Jane Doe" with the username "jane_admin" within the `_ADMINS` OU.
+- **Added the "jane_admin" user account to the built-in "Domain Admins" security group**, granting administrative privileges over the domain.
+- **Logged off the `dc-1` server** and logged back in using the "jane_admin" domain account to verify administrative access.
 
 #### Open Active Directory Users and Computers
 <p>
@@ -342,11 +355,6 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 </p>
 
 <p>
-    <img width="743" alt="image" src="https://github.com/user-attachments/assets/dc5cb4e8-666f-4113-806b-4e2aa194831a" />
-</p>
-
-
-<p>
     <img width="804" alt="image" src="https://github.com/user-attachments/assets/b946e468-2210-4545-a665-7f0f92d66c0d" />
 </p>
 
@@ -362,8 +370,13 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 <br />
 
 ### 12. Client Domain Join:
-- Join the Windows 10 VM to the created domain
-- Disable Microsoft Defender to allow Domain Controller network communication
+
+- **On `client-1`, navigated to System Properties.**
+- **Clicked "Change..."** in the Computer Name tab.
+- **Selected the "Domain" radio button** and entered the domain name (`mydomain.com`).
+- **Provided domain administrator credentials** when prompted to authorize the domain join.
+- **Restarted the `client-1` VM** to complete the domain join process.
+- **Temporarily disabled Microsoft Defender Firewall** on `client-1` to ensure unrestricted network communication with the Domain Controller for testing purposes.
 
 #### Change from Workgroup to Domain
 <p>
@@ -371,7 +384,7 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 </p>
 
 <p>
-   System -> Advanced System Setting -> Computer Name -> 
+   System -> Advanced System Setting -> Computer Name ->
 </p>
 
 <p>
@@ -387,27 +400,13 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
    <img width="1069" alt="image" src="https://github.com/user-attachments/assets/bca52605-6b03-4b38-b69d-3d6e7919dbc5" />
 </p>
 
-<!---
-<p>
-   <img width="1017" alt="image" src="https://github.com/user-attachments/assets/27278ec7-f213-4606-b910-b8c2dae40ec0" />
-</p>
-
-<p>
-   <img width="1004" alt="image" src="https://github.com/user-attachments/assets/c172262d-d8f3-47ec-aa75-159f71c87777" />
-</p>
-
-#### Create a new Organizational Unit (OU) for Client Machines
-
-<p>
-   <img width="820" alt="image" src="https://github.com/user-attachments/assets/7747e3e7-67cc-48c3-9fbe-70ebf4c0b755" />
-</p>
---->
-
 ### 13. Create Active Directory User Accounts:
 
-- Create user accounts with varying permissions
-- Create security groups, and add users to them
-- Test user logins, and group policy
+- **Used PowerShell ISE on the Server VM (`dc-1`)** to execute a script for bulk creation of new domain user accounts.
+- **Created user accounts** with various naming conventions and attributes.
+- **Created security groups** (though not explicitly shown in screenshots for this step).
+- **Added relevant users to the created security groups** based on their roles or permissions.
+- **Prepared for testing user logins and group policy application** in subsequent steps.
 
 #### Use Powershell ISE (on Server VM) to Run Script to Create Users
 
@@ -421,31 +420,41 @@ ping from client to client succeeded --> leads me to believe ICMP is being block
 
 ### 14. Create Group Policy to Allow All Domain Users to Connect to ANY Client Machine in the _CLIENT OU via Remote Desktop
 
-- The "Allow log on through Remote Desktop Services" user right determines which users are allowed to establish remote desktop sessions to the target computer.
-- By adding the "Domain Users" group to this right, you are granting all domain users the permission to RDP into the client VM.
-- Linking the GPO to the OU where the client resides ensures that the client recieves the GPO.
-- Forcing the gpupdate on the client ensures the client recieves the policy immediately, rather than waiting for the normal gpupdate interval.
+- **Opened Group Policy Management Console (gpmc.msc)** on `dc-1`.
+- **Created a new GPO** named "Allow Domain Users RDP".
+- **Edited the "Allow Domain Users RDP" GPO.**
+- **Navigated to `Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Local Policies -> User Rights Assignment`.**
+- **Configured the "Allow log on through Remote Desktop Services" user right** to include the "Domain Users" group.
+- **Linked the "Allow Domain Users RDP" GPO to the `_CLIENT` Organizational Unit (OU)** where client machines would reside.
+- **Attempted to RDP** into `client-1` with a newly created domain user account (initially failed).
+- **Forced a Group Policy update** on `client-1` using `gpupdate /force`.
+- **Attempted RDP again** with the same domain user account (still failed).
+- **Realized that adding "Domain Users" to the "Allow log on through Remote Desktop Services" user right is insufficient.** The "Domain Users" group also needs to be a member of the local **"Remote Desktop Users" group** on the client machine.
+- **Navigated to `Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Restricted Groups` within the "Allow Domain Users RDP" GPO.**
+- **Added the local "Remote Desktop Users" group** and specified "Domain Users" as a member of this local group.
+- **Forced another Group Policy update** on `client-1` using `gpupdate /force`.
+- **Successfully RDP'd** into `client-1` using a standard domain user account, confirming the GPO was applied correctly.
 
 <p>
-   <img width="455" alt="image" src="https://github.com/user-attachments/assets/5185c299-4995-4fcf-81bf-3da9695a50bf" />
+    <img width="455" alt="image" src="https://github.com/user-attachments/assets/5185c299-4995-4fcf-81bf-3da9695a50bf" />
 </p>
 <p>
-   <img width="927" alt="image" src="https://github.com/user-attachments/assets/31e92fff-ce55-4f77-9eeb-51f9fb5bd084" />
+    <img width="927" alt="image" src="https://github.com/user-attachments/assets/31e92fff-ce55-4f77-9eeb-51f9fb5bd084" />
 </p>
 <p>
-   <img width="662" alt="image" src="https://github.com/user-attachments/assets/6818ee45-95b9-46c8-8c96-b57b1e207853" />
+    <img width="662" alt="image" src="https://github.com/user-attachments/assets/6818ee45-95b9-46c8-8c96-b57b1e207853" />
 </p>
 
 #### Edit Created GPO to allow Remote desktop
 <p>
-   Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Local Policies1 -> User Rights Assignment
+    Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Local Policies1 -> User Rights Assignment
 </p>
 <p>
-   <img width="1043" alt="image" src="https://github.com/user-attachments/assets/ef0ec565-2d92-48bf-83a1-ad6f5f03900c" />
+    <img width="1043" alt="image" src="https://github.com/user-attachments/assets/ef0ec565-2d92-48bf-83a1-ad6f5f03900c" />
 </p>
 
 <p>
-   <img width="1043" alt="image" src="https://github.com/user-attachments/assets/590faaf3-088a-4e42-93b3-ea8665672ca9" />
+    <img width="1043" alt="image" src="https://github.com/user-attachments/assets/590faaf3-088a-4e42-93b3-ea8665672ca9" />
 </p>
 
 #### Double click on Double-click on "Allow log on through Remote Desktop Services."
@@ -455,13 +464,12 @@ Type "Domain Users" and click "Check Names."
 Click "OK" to add "Domain Users."
 
 <p>
-   <img width="1013" alt="image" src="https://github.com/user-attachments/assets/02443b9b-09ca-4532-bbbe-77a343b1c6e2" />
+    <img width="1013" alt="image" src="https://github.com/user-attachments/assets/02443b9b-09ca-4532-bbbe-77a343b1c6e2" />
 </p>
 
 <p>
-   <img width="1364" alt="image" src="https://github.com/user-attachments/assets/20f3104f-292b-46ad-b08b-44b0f6c1bb0c" />
+    <img width="1364" alt="image" src="https://github.com/user-attachments/assets/20f3104f-292b-46ad-b08b-44b0f6c1bb0c" />
 </p>
-
 
 #### Link the GPO to the Client's OU:
 
@@ -471,30 +479,30 @@ Click "OK" to add "Domain Users."
 - Click "OK."
 
 <p>
-   <img width="1260" alt="image" src="https://github.com/user-attachments/assets/2f164d9a-23ec-4852-a87c-9a6b1e751d17" />
+    <img width="1260" alt="image" src="https://github.com/user-attachments/assets/2f164d9a-23ec-4852-a87c-9a6b1e751d17" />
 </p>
 
 #### Test RDP Access Prior to Group Policy Update (on the Client VM):
 - use newly created user to test Remote Access
 
 <p>
-   <img width="883" alt="image" src="https://github.com/user-attachments/assets/8d6e9bde-4355-47b1-b078-f2f881388fdd" />
+    <img width="883" alt="image" src="https://github.com/user-attachments/assets/8d6e9bde-4355-47b1-b078-f2f881388fdd" />
 </p>
 <p>
-   <img width="788" alt="image" src="https://github.com/user-attachments/assets/87fae742-d4ee-4581-92da-a1b9436fca3f" />
+    <img width="788" alt="image" src="https://github.com/user-attachments/assets/87fae742-d4ee-4581-92da-a1b9436fca3f" />
 </p>
 <p>
-   <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
+    <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
 </p>
 
 #### Force Group Policy Update (on the Client VM):
 
 - On the Windows 10 client VM, open a command prompt as administrator.
-- Run the command gpupdate /force.
+- Run the command `gpupdate /force`.
 - This will force the client to retrieve and apply the new GPO.
 
 <p>
-   <img width="591" alt="image" src="https://github.com/user-attachments/assets/1adb89e5-f0b2-42aa-9a35-42271989d813" />
+    <img width="591" alt="image" src="https://github.com/user-attachments/assets/1adb89e5-f0b2-42aa-9a35-42271989d813" />
 </p>
 
 #### Test RDP Access (with Prev. Attempted User):
@@ -502,10 +510,10 @@ Click "OK" to add "Domain Users."
 - From another domain-joined machine, or from a machine that has network access to the Client VM, attempt to RDP into the client using a domain user account.
 
 <p>
-   <img width="819" alt="image" src="https://github.com/user-attachments/assets/c157dab6-8030-46ca-bd55-c1cca9b4468b" />
+    <img width="819" alt="image" src="https://github.com/user-attachments/assets/c157dab6-8030-46ca-bd55-c1cca9b4468b" />
 </p>
 <p>
-   <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
+    <img width="618" alt="image" src="https://github.com/user-attachments/assets/d0486b2e-8d35-4568-85ea-f39900f09431" />
 </p>
 
 #### Failed. So, restarted/rebooted the machine
@@ -518,31 +526,31 @@ Add Domain Users to the Remote Desktop Users Group:
 
 In the Group policy editor, navigate to:
 Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Restricted Groups.
-Right click, and select "Add Group".   
+Right click, and select "Add Group".
 Type "Remote Desktop Users" and click OK.
 Under "Members of this group" click "Add".
 Type "Domain Users" and click OK.
 Click OK.
 <p>
-   <img width="807" alt="image" src="https://github.com/user-attachments/assets/8afcbbfd-d86e-4c5f-95be-f5665a476af6" />
+    <img width="807" alt="image" src="https://github.com/user-attachments/assets/8afcbbfd-d86e-4c5f-95be-f5665a476af6" />
 </p>
 
 <p>
-   <img width="848" alt="image" src="https://github.com/user-attachments/assets/bf48a530-8585-4a39-bd7d-b36c72461d1a" />
+    <img width="848" alt="image" src="https://github.com/user-attachments/assets/bf48a530-8585-4a39-bd7d-b36c72461d1a" />
 </p>
 
 <p>
-   <img width="559" alt="image" src="https://github.com/user-attachments/assets/529e4e36-55ed-4b5a-958a-399927e68f8f" />
+    <img width="559" alt="image" src="https://github.com/user-attachments/assets/529e4e36-55ed-4b5a-958a-399927e68f8f" />
 </p>
 
 #### Force Group Policy Update AGAIN (on the Client VM):
 
 - On the Windows 10 client VM, open a command prompt as administrator.
-- Run the command gpupdate /force.
+- Run the command `gpupdate /force`.
 - This will force the client to retrieve and apply the new GPO
 
 <p>
-   <img width="625" alt="image" src="https://github.com/user-attachments/assets/520ea852-0303-44ea-9c9f-055ae652f1f8" />
+    <img width="625" alt="image" src="https://github.com/user-attachments/assets/520ea852-0303-44ea-9c9f-055ae652f1f8" />
 </p>
 
 #### Test RDP Access AGAIN (with Prev. Attempted User):
@@ -551,149 +559,177 @@ Click OK.
 
 #### SUCCESS!
 <p>
-   <img width="1168" alt="image" src="https://github.com/user-attachments/assets/f123ea29-6b1f-4641-aa1e-a2ac9358db9d" />
+    <img width="1168" alt="image" src="https://github.com/user-attachments/assets/f123ea29-6b1f-4641-aa1e-a2ac9358db9d" />
 </p>
 
 ### 15. Create New VM, Join to Domain, and Test RDP GPO Inheritance
 
+- **Deployed a new Windows 10 Virtual Machine** named `client-2`.
+- **Configured the DNS server IP address** on `client-2` to the private IP of the Domain Controller (`dc-1`).
+- **Observed that the initial DNS setting** on `client-2` still showed the old Azure DNS server.
+- **Attempted `ipconfig /flushdns`** on `client-2` (did not resolve the DNS issue).
+- **Attempted `ipconfig /release`** on `client-2` (broke the RDP connection).
+- **Restarted the `client-2` VM** via the Azure portal, which resolved the DNS server IP to the Domain Controller's private IP.
+- **Joined `client-2` to the `mydomain.com` domain.**
+- **Initially tested RDP access** to `client-2` with a domain user account *before* moving it to the `_CLIENT` OU (access was denied as expected).
+- **Manually moved the `client-2` computer object** from the default "Computers" container to the `_CLIENT` OU in Active Directory Users and Computers.
+- **Observed that after a short period (without manual `gpupdate /force` or reboot), the RDP GPO was automatically inherited**, and RDP access with domain users was successful, demonstrating GPO inheritance.
+
 #### Configure new VM's DNS server to be DC server private IP address
 
 <p>
-   <img width="781" alt="image" src="https://github.com/user-attachments/assets/4178753c-7313-4afc-8756-14703a6ebf95" />
+    <img width="781" alt="image" src="https://github.com/user-attachments/assets/4178753c-7313-4afc-8756-14703a6ebf95" />
 </p>
 
 #### DNS setting on machine still show old DNS
 <p>
-   <img width="798" alt="image" src="https://github.com/user-attachments/assets/2d050b1d-840f-4b79-a555-16fbc396c62b" />
+    <img width="798" alt="image" src="https://github.com/user-attachments/assets/2d050b1d-840f-4b79-a555-16fbc396c62b" />
 </p>
 
 #### Test with DNS Flush -> Didn't Work
 <p>
-   <img width="771" alt="image" src="https://github.com/user-attachments/assets/29709c64-efd7-4eac-9281-48991ed2fa47" />
+    <img width="771" alt="image" src="https://github.com/user-attachments/assets/29709c64-efd7-4eac-9281-48991ed2fa47" />
 </p>
 
-#### Test with release -> renew 
+#### Test with release -> renew
 
 - ` ipconfig /release ` broke my RDP connection, so had to restart the VM which flushed the DNS so didn't get a chance to teste ` ipconfig /renew `
 - But, new VM DNS Server IP is the Domain Controller's Private IP. now
-  
+
 <p>
-   <img width="909" alt="image" src="https://github.com/user-attachments/assets/bd76fee1-aa4f-46b5-ba60-aa9992f72f30" />
+    <img width="909" alt="image" src="https://github.com/user-attachments/assets/bd76fee1-aa4f-46b5-ba60-aa9992f72f30" />
 </p>
 
 #### Join Domain
 
 <p>
-   <img width="854" alt="image" src="https://github.com/user-attachments/assets/e4195fc0-97cd-466c-887d-3a7fdedcf034" />
+    <img width="854" alt="image" src="https://github.com/user-attachments/assets/e4195fc0-97cd-466c-887d-3a7fdedcf034" />
 </p>
 
 #### Domain Join Success -> but not part of OU -> test RDP to check GPO from a non-OU perspective
 <p>
-   <img width="771" alt="image" src="https://github.com/user-attachments/assets/901a3b4b-9dc4-4ee7-b88f-4ca4f6503d1c" />
+    <img width="771" alt="image" src="https://github.com/user-attachments/assets/901a3b4b-9dc4-4ee7-b88f-4ca4f6503d1c" />
 </p>
 
 #### Denied
 
 <p>
-   <img width="619" alt="image" src="https://github.com/user-attachments/assets/dfa27028-c77f-47e5-80cb-c9970e1fcb14" />
+    <img width="619" alt="image" src="https://github.com/user-attachments/assets/dfa27028-c77f-47e5-80cb-c9970e1fcb14" />
 </p>
 
 #### Manually move computer to _CLIENT OU
 <p>
-   <img width="678" alt="image" src="https://github.com/user-attachments/assets/a452bc19-e10b-4609-aeca-576efb577919" />
+    <img width="678" alt="image" src="https://github.com/user-attachments/assets/a452bc19-e10b-4609-aeca-576efb577919" />
 </p>
 
 #### Was denied and while researching whether to reboot or gpupdate /force to apply the inheretance -> the GPO flowed down to the new VM
 
 <p>
-   <img width="897" alt="image" src="https://github.com/user-attachments/assets/4b4eb316-e866-4052-8e9d-dedbc57b7399" />
+    <img width="897" alt="image" src="https://github.com/user-attachments/assets/4b4eb316-e866-4052-8e9d-dedbc57b7399" />
 </p>
 
 <p>
-   <img width="307" alt="image" src="https://github.com/user-attachments/assets/eab99bf7-dd23-421f-95cd-e6f8f1932089" />
+    <img width="307" alt="image" src="https://github.com/user-attachments/assets/eab99bf7-dd23-421f-95cd-e6f8f1932089" />
 </p>
 
-### 15. Create Group Policy to enforce Identity and Access Management (IAM) security policy
+### 16. Create Group Policy to enforce Identity and Access Management (IAM) security policy
 
-- Password lockout policy is not setup by default
-- in the DC
-- pick a user
+- **Opened Group Policy Management Console (gpmc.msc)** on `dc-1`.
+- **Edited the "Default Domain Policy"** to apply password lockout settings domain-wide.
+- **Navigated to `Computer Configuration -> Policies -> Account Policies -> Password Policy`.**
+- **Configured the following settings:**
+    - "Enforce password history": Set to a desired number (e.g., 24).
+    - "Maximum password age": Set to a desired duration (e.g., 90 days).
+    - "Minimum password length": Set to a desired length (e.g., 8 characters).
+    - "Password must meet complexity requirements": Enabled.
+- **Navigated to `Computer Configuration -> Policies -> Account Policies -> Account Lockout Policy`.**
+- **Configured the following settings:**
+    - "Account lockout threshold": Set to 5 invalid logon attempts.
+    - "Account lockout duration": Set to a desired duration (e.g., 30 minutes).
+    - "Reset account lockout counter after": Set to a duration less than the lockout duration (e.g., 30 minutes).
+- **Forced a Group Policy update** on `client-2` using `gpupdate /force`.
+- **Attempted to log in to `client-2`** with an incorrect password more than the lockout threshold (5 times).
+- **Observed that the account was locked out**, preventing further login attempts.
+- **On the Domain Controller (`dc-1`), unlocked the test user account** via Active Directory Users and Computers.
+- **Successfully logged back into `client-2`** with the correct password.
+- **Demonstrated password reset functionality** for a domain user from Active Directory Users and Computers on `dc-1`.
+- **Demonstrated the ability to disable and enable a domain user account** from Active Directory Users and Computers on `dc-1`.
 
 #### We can set up a new Group Policy, but instead we're going to edit the Default Domain Policy since the Password lockout should apply to the whole domain
 <p>
-   <img width="775" alt="image" src="https://github.com/user-attachments/assets/17e38a5e-bf2c-4973-9619-10eb116187fc" />
+    <img width="775" alt="image" src="https://github.com/user-attachments/assets/17e38a5e-bf2c-4973-9619-10eb116187fc" />
 </p>
 
 #### No lockout
 <p>
-   <img width="862" alt="image" src="https://github.com/user-attachments/assets/25502274-9776-4604-9781-4aab2a575d73" />
+    <img width="862" alt="image" src="https://github.com/user-attachments/assets/25502274-9776-4604-9781-4aab2a575d73" />
 </p>
 
 #### 5 Login attemps
 <p>
-   <img width="1006" alt="image" src="https://github.com/user-attachments/assets/b3f32194-5a07-4691-9258-ebc2c8efa06f" />
+    <img width="1006" alt="image" src="https://github.com/user-attachments/assets/b3f32194-5a07-4691-9258-ebc2c8efa06f" />
 </p>
 <p>
-   <img width="1146" alt="image" src="https://github.com/user-attachments/assets/5d2d6d09-dd5e-4af9-a06b-7b2b6e5b587c" />
+    <img width="1146" alt="image" src="https://github.com/user-attachments/assets/5d2d6d09-dd5e-4af9-a06b-7b2b6e5b587c" />
 </p>
 
 #### On cliet 2 (new VM) I gpupdate /force
 <p>
-   <img width="621" alt="image" src="https://github.com/user-attachments/assets/bdafc0cd-3392-422f-a695-7798096163fc" />
+    <img width="621" alt="image" src="https://github.com/user-attachments/assets/bdafc0cd-3392-422f-a695-7798096163fc" />
 </p>
 
 #### Attemp 5+ bad login attempts
 <p>
-   <img width="604" alt="image" src="https://github.com/user-attachments/assets/907983cb-a093-4518-ad34-c33ac1d7f14b" />
+    <img width="604" alt="image" src="https://github.com/user-attachments/assets/907983cb-a093-4518-ad34-c33ac1d7f14b" />
 </p>
 
 #### Unlock account on DC
 <p>
-   <img width="729" alt="image" src="https://github.com/user-attachments/assets/544f1812-9068-4678-997e-e34a2806e394" />
+    <img width="729" alt="image" src="https://github.com/user-attachments/assets/544f1812-9068-4678-997e-e34a2806e394" />
 </p>
 
 #### Back in Business
 <p>
-   <img width="527" alt="image" src="https://github.com/user-attachments/assets/c4b1ec95-be2d-4055-a510-7fb2edbc2b32" />
+    <img width="527" alt="image" src="https://github.com/user-attachments/assets/c4b1ec95-be2d-4055-a510-7fb2edbc2b32" />
 
 </p>
-
 
 #### Resetting Password
 
 - from the domain, right click on user and see
 
 <p>
-   <img width="682" alt="image" src="https://github.com/user-attachments/assets/509867fb-6996-4716-aa33-de8120c680f1" />
+    <img width="682" alt="image" src="https://github.com/user-attachments/assets/509867fb-6996-4716-aa33-de8120c680f1" />
 </p>
 
 #### Disable/Enable Account (Maybe if compromised)
 
 <p>
-   <img width="726" alt="image" src="https://github.com/user-attachments/assets/35542e7a-8bff-44a6-b693-18448b211bad" />
+    <img width="726" alt="image" src="https://github.com/user-attachments/assets/35542e7a-8bff-44a6-b693-18448b211bad" />
 </p>
 <p>
-   <img width="565" alt="image" src="https://github.com/user-attachments/assets/1e63cb88-aeaa-4b97-b42d-642c14a64336" />
+    <img width="565" alt="image" src="https://github.com/user-attachments/assets/1e63cb88-aeaa-4b97-b42d-642c14a64336" />
 </p>
 
 <p>
-   <img width="709" alt="image" src="https://github.com/user-attachments/assets/5cb80581-a785-47b6-a1a8-79ec5c3becae" />
+    <img width="709" alt="image" src="https://github.com/user-attachments/assets/5cb80581-a785-47b6-a1a8-79ec5c3becae" />
 </p>
 
 #### Back in Business
 <p>
-   <img width="537" alt="image" src="https://github.com/user-attachments/assets/1f800038-f0e2-42ef-a192-12749ed6615d" />
+    <img width="537" alt="image" src="https://github.com/user-attachments/assets/1f800038-f0e2-42ef-a192-12749ed6615d" />
 </p>
-
 
 ---
 
-9. Verification:
-    - Verify DNS resolution
-    - Verify domain join and user authentication
-    - Verify group policy application
+## Verification:
+
+- **Verified DNS resolution** on the client machines by successfully pinging the Domain Controller by its hostname and resolving domain names.
+- **Verified domain join and user authentication** by successfully logging into the client VMs with various domain user accounts.
+- **Verified Group Policy application** by confirming that the RDP access GPO and the account lockout policy were successfully applied to the client machines.
+
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+This project successfully demonstrated the deployment of a basic on-premises Active Directory environment within Azure Virtual Machines. Key aspects of AD, including domain creation, user and group management, DNS integration, and Group Policy application for access control and security policies, were explored and validated. This provides a foundational understanding of how Active Directory can be implemented and managed within a cloud infrastructure.
 </p>
 
 <br />
