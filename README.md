@@ -435,6 +435,8 @@ As a preliminary network connectivity check, ICMP (Internet Control Message Prot
 - **Forced another Group Policy update** on `client-1` using `gpupdate /force`.
 - **Successfully RDP'd** into `client-1` using a standard domain user account, confirming the GPO was applied correctly.
 
+#### Create Group Policy to Allow All Domain Users to Connect to ANY Client Machine in the _CLIENT OU via Remote Desktop
+
 <p>
     <img width="455" alt="image" src="https://github.com/user-attachments/assets/5185c299-4995-4fcf-81bf-3da9695a50bf" />
 </p>
@@ -457,12 +459,7 @@ As a preliminary network connectivity check, ICMP (Internet Control Message Prot
     <img width="1043" alt="image" src="https://github.com/user-attachments/assets/590faaf3-088a-4e42-93b3-ea8665672ca9" />
 </p>
 
-#### Double click on Double-click on "Allow log on through Remote Desktop Services."
-Check the "Define these policy settings" box.
-Click "Add User or Group."
-Type "Domain Users" and click "Check Names."
-Click "OK" to add "Domain Users."
-
+#### Double click on "Allow log on through Remote Desktop Services."
 <p>
     <img width="1013" alt="image" src="https://github.com/user-attachments/assets/02443b9b-09ca-4532-bbbe-77a343b1c6e2" />
 </p>
@@ -473,18 +470,11 @@ Click "OK" to add "Domain Users."
 
 #### Link the GPO to the Client's OU:
 
-- In the Group Policy Management console, navigate to the Organizational Unit (OU) that contains your Windows 10 client VM.
-- Right-click on the OU and select "Link an Existing GPO."
-- Select the "Allow Domain Users RDP" GPO you created.
-- Click "OK."
-
 <p>
     <img width="1260" alt="image" src="https://github.com/user-attachments/assets/2f164d9a-23ec-4852-a87c-9a6b1e751d17" />
 </p>
 
 #### Test RDP Access Prior to Group Policy Update (on the Client VM):
-- use newly created user to test Remote Access
-
 <p>
     <img width="883" alt="image" src="https://github.com/user-attachments/assets/8d6e9bde-4355-47b1-b078-f2f881388fdd" />
 </p>
@@ -497,17 +487,11 @@ Click "OK" to add "Domain Users."
 
 #### Force Group Policy Update (on the Client VM):
 
-- On the Windows 10 client VM, open a command prompt as administrator.
-- Run the command `gpupdate /force`.
-- This will force the client to retrieve and apply the new GPO.
-
 <p>
     <img width="591" alt="image" src="https://github.com/user-attachments/assets/1adb89e5-f0b2-42aa-9a35-42271989d813" />
 </p>
 
 #### Test RDP Access (with Prev. Attempted User):
-
-- From another domain-joined machine, or from a machine that has network access to the Client VM, attempt to RDP into the client using a domain user account.
 
 <p>
     <img width="819" alt="image" src="https://github.com/user-attachments/assets/c157dab6-8030-46ca-bd55-c1cca9b4468b" />
@@ -519,18 +503,25 @@ Click "OK" to add "Domain Users."
 #### Failed. So, restarted/rebooted the machine
 
 ### Need to Add Remote Desktop Users to Security group
+<p>
+   The "Allow log on through Remote Desktop Services" user right grants the ability to initiate an RDP session, but it doesn't automatically grant the permission to connect to the remote computer
+</p>
 
-The "Allow log on through Remote Desktop Services" user right grants the ability to initiate an RDP session, but it doesn't automatically grant the permission to connect to the remote computer
+<p>
+   Add Domain Users to the Remote Desktop Users Group:
+</p>
 
-Add Domain Users to the Remote Desktop Users Group:
+<p>
+   In the Group policy editor, navigate to:
+</p>
 
-In the Group policy editor, navigate to:
-Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Restricted Groups.
-Right click, and select "Add Group".
-Type "Remote Desktop Users" and click OK.
-Under "Members of this group" click "Add".
-Type "Domain Users" and click OK.
-Click OK.
+- Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Restricted Groups.
+- Right click, and select "Add Group".
+- Type "Remote Desktop Users" and click OK.
+- Under "Members of this group" click "Add".
+- Type "Domain Users" and click OK.
+- Click OK.
+
 <p>
     <img width="807" alt="image" src="https://github.com/user-attachments/assets/8afcbbfd-d86e-4c5f-95be-f5665a476af6" />
 </p>
@@ -545,17 +536,11 @@ Click OK.
 
 #### Force Group Policy Update AGAIN (on the Client VM):
 
-- On the Windows 10 client VM, open a command prompt as administrator.
-- Run the command `gpupdate /force`.
-- This will force the client to retrieve and apply the new GPO
-
 <p>
     <img width="625" alt="image" src="https://github.com/user-attachments/assets/520ea852-0303-44ea-9c9f-055ae652f1f8" />
 </p>
 
 #### Test RDP Access AGAIN (with Prev. Attempted User):
-
-- From another domain-joined machine, or from a machine that has network access to the Client VM, attempt to RDP into the client using a domain user account.
 
 #### SUCCESS!
 <p>
