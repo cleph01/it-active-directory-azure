@@ -8,6 +8,9 @@
 
 This project demonstrates the implementation of Active Directory (AD) within Azure Virtual Machines, showcasing a fundamental component of enterprise network management.
 
+### Video Demonstration
+- ### [YouTube: Deploying and Configuring on-premises Active Directory in Azure](https://youtu.be/g6oYBY-bbC0)
+
 ### What is Active Directory?
 
 * Active Directory is a directory service developed by Microsoft.
